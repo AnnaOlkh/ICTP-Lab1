@@ -13,8 +13,8 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Rating> builder)
         {
-            builder.HasKey(rating => rating.ID);
-            builder.Property(rating => rating.ID).UseIdentityColumn();
+            builder.HasKey(rating => rating.Id);
+            builder.Property(rating => rating.Id).UseIdentityColumn();
 
             builder.Property(rating => rating.Score)
                 .IsRequired();

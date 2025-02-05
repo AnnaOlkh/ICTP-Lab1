@@ -14,7 +14,6 @@ namespace QuestRoomMVC.Domain.Entities
             Admin,
             Сustomer
         }
-        public int ID { get; set; }
 
         [MaxLength(50)]
         public required string FirstName { get; set; }

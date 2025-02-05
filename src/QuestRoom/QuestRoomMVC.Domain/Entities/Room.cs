@@ -9,8 +9,6 @@ namespace QuestRoomMVC.Domain.Entities
 {
     public class Room : Entity, IAggregateRoot
     {
-        public int ID { get; set; }
-
         [MaxLength(50)]
         public required string Name { get; set; }
 

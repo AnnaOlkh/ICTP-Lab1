@@ -13,7 +13,7 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Booking> builder)
         {
-            builder.HasKey(booking => booking.ID);
+            builder.HasKey(booking => booking.Id);
 
             builder.Property(booking => booking.PlayersNumber)
                 .IsRequired();
@@ -28,17 +28,9 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
                 .WithMany(user => user.Bookings)
                 .HasForeignKey(booking => booking.UserId);
 
-            builder.HasOne(booking => booking.Room)
-                .WithMany(room => room.Bookings)
-                .HasForeignKey(booking => booking.RoomId);
-
-            /*builder.HasOne(booking => booking.Schedule)
-                .WithOne()
-
-                .HasForeignKey<Booking>(booking => booking.ScheduleId);*/
-           /* builder.HasOne(booking => booking.Schedule)
-                .WithMany()
-                .HasForeignKey(booking => booking.ScheduleId);*/
+            builder.HasOne(booking => booking.Schedule)
+                 .WithOne(schedule => schedule.Booking)
+                 .HasForeignKey<Booking>(booking => booking.ScheduleId);
         }
     }
 }

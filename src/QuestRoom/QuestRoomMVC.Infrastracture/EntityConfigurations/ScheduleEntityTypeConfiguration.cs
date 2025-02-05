@@ -13,8 +13,8 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Schedule> builder)
         {
-            builder.HasKey(schedule => schedule.ID);
-            builder.Property(schedule => schedule.ID).UseIdentityColumn();
+            builder.HasKey(schedule => schedule.Id);
+            builder.Property(schedule => schedule.Id).UseIdentityColumn();
 
             builder.Property(schedule => schedule.StartTime)
                 .IsRequired();
@@ -32,7 +32,14 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
 
             builder.HasOne(schedule => schedule.Room)
                 .WithMany(room => room.Schedules)
-                .HasForeignKey(schedule => schedule.RoomId);
+                .HasForeignKey(schedule => schedule.RoomId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(schedule => schedule.Booking)
+                .WithOne(booking => booking.Schedule)
+                .HasForeignKey<Booking>(booking => booking.ScheduleId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

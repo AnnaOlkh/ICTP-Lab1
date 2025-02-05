@@ -12,8 +12,8 @@ using QuestRoomMVC.Infrastracture;
 namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
 {
     [DbContext(typeof(QuestRoomContext))]
-    [Migration("20250203022015_Initial")]
-    partial class Initial
+    [Migration("20250205210658_NewInitial")]
+    partial class NewInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,11 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Booking", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
                         .HasMaxLength(1000)
@@ -40,13 +40,10 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<int>("PlayersNumber")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomId")
+                    b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<int>("ScheduleId")
@@ -55,7 +52,7 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
@@ -69,59 +66,50 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Genre", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Genre");
                 });
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Location", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Location");
                 });
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Rating", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
@@ -132,7 +120,7 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
@@ -143,11 +131,11 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Room", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -160,9 +148,6 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("GenreId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Image")
@@ -182,7 +167,7 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("GenreId");
 
@@ -193,20 +178,17 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Schedule", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsBooked")
                         .HasColumnType("bit");
@@ -220,7 +202,7 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
@@ -229,11 +211,11 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.User", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -242,9 +224,6 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -257,21 +236,19 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("User");
                 });
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Booking", b =>
                 {
-                    b.HasOne("QuestRoomMVC.Domain.Entities.Room", "Room")
+                    b.HasOne("QuestRoomMVC.Domain.Entities.Room", null)
                         .WithMany("Bookings")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomId");
 
                     b.HasOne("QuestRoomMVC.Domain.Entities.Schedule", "Schedule")
-                        .WithOne()
+                        .WithOne("Booking")
                         .HasForeignKey("QuestRoomMVC.Domain.Entities.Booking", "ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -281,8 +258,6 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Room");
 
                     b.Navigation("Schedule");
 
@@ -355,6 +330,11 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.Navigation("Ratings");
 
                     b.Navigation("Schedules");
+                });
+
+            modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Schedule", b =>
+                {
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.User", b =>

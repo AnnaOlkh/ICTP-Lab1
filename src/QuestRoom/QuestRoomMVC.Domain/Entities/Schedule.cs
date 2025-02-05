@@ -9,7 +9,6 @@ namespace QuestRoomMVC.Domain.Entities
 {
     public class Schedule : Entity
     {
-        public int ID { get; set; }
         public int RoomId { get; set; }
         public Room? Room { get; set; }
         public required DateTime StartTime { get; set; }
@@ -18,6 +17,7 @@ namespace QuestRoomMVC.Domain.Entities
 
         [Range(0, int.MaxValue)]
         public int Price { get; set; }
+        public Booking? Booking { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

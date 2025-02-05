@@ -13,7 +13,7 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Genre> builder)
         {
-            builder.HasKey(genre => genre.ID);//ID
+            builder.HasKey(genre => genre.Id);
 
             builder.Property(genre => genre.Name)
                 .IsRequired()

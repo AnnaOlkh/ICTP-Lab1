@@ -9,13 +9,12 @@ namespace QuestRoomMVC.Domain.Entities
 {
     public class Booking : Entity
     {
-        public int ID { get; set; }
         public int UserId { get; set; }
         public User? User { get; set; }
-        public int RoomId { get; set; }
-        public Room? Room { get; set; }
-        /*public int ScheduleId { get; set; }
-        public Schedule? Schedule { get; set; }*/
+        /*public int RoomId { get; set; }
+        public Room? Room { get; set; }*/
+        public int ScheduleId { get; set; }
+        public Schedule? Schedule { get; set; }
 
         [Range(1, 20)]
         public required int PlayersNumber { get; set; }

@@ -13,7 +13,7 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Location> builder)
         {
-            builder.HasKey(location => location.ID);
+            builder.HasKey(location => location.Id);
 
             builder.Property(location => location.Name)
                 .IsRequired()

@@ -13,8 +13,8 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Room> builder)
         {
-            builder.HasKey(room => room.ID);
-            builder.Property(room => room.ID).UseIdentityColumn();
+            builder.HasKey(room => room.Id);
+            builder.Property(room => room.Id).UseIdentityColumn();
 
             builder.Property(room => room.Name)
                 .IsRequired()
@@ -46,10 +46,6 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
             builder.HasMany(room => room.Ratings)
                 .WithOne(rating => rating.Room)
                 .HasForeignKey(rating => rating.RoomId);
-
-            builder.HasMany(room => room.Bookings)
-                .WithOne(booking => booking.Room)
-                .HasForeignKey(booking => booking.RoomId);
 
             builder.HasMany(room => room.Schedules)
                 .WithOne(schedule => schedule.Room)

@@ -9,7 +9,6 @@ namespace QuestRoomMVC.Domain.Entities
 {
     public class Location : Entity
     {
-        public int ID { get; set; }
         [MaxLength(50)]
         public required string Name { get; set; }
         public ICollection<Room> Rooms { get; set; } = new List<Room>();

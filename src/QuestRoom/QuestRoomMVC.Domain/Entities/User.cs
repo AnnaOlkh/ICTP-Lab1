@@ -26,5 +26,7 @@ namespace QuestRoomMVC.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedAt { get; set; }
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }

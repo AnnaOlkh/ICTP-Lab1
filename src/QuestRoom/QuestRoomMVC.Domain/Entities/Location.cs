@@ -11,6 +11,8 @@ namespace QuestRoomMVC.Domain.Entities
     {
         public int ID { get; set; }
         [MaxLength(50)]
-        public string Name { get; set; } = string.Empty;
+        public required string Name { get; set; }
+        public ICollection<Room> Rooms { get; set; } = new List<Room>();
+
     }
 }

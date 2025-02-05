@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVC", "MVC", "{D4501FB8-4BC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestRoomMVC.Domain", "QuestRoomMVC.Domain\QuestRoomMVC.Domain.csproj", "{53E0DFEF-B4D7-4B20-8E94-715A31B4D782}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestRoomMVC.Infrastracture", "QuestRoomMVC.Infrastracture\QuestRoomMVC.Infrastracture.csproj", "{73FEDD73-EEA3-4BDD-8CE3-E912E7C28237}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestRoomMVC.WebMVC", "QuestRoomMVC.WebMVC\QuestRoomMVC.WebMVC.csproj", "{76118F5E-D6BD-4644-922F-8543FA17F581}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,11 +21,21 @@ Global
 		{53E0DFEF-B4D7-4B20-8E94-715A31B4D782}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53E0DFEF-B4D7-4B20-8E94-715A31B4D782}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53E0DFEF-B4D7-4B20-8E94-715A31B4D782}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73FEDD73-EEA3-4BDD-8CE3-E912E7C28237}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73FEDD73-EEA3-4BDD-8CE3-E912E7C28237}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73FEDD73-EEA3-4BDD-8CE3-E912E7C28237}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73FEDD73-EEA3-4BDD-8CE3-E912E7C28237}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76118F5E-D6BD-4644-922F-8543FA17F581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76118F5E-D6BD-4644-922F-8543FA17F581}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76118F5E-D6BD-4644-922F-8543FA17F581}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76118F5E-D6BD-4644-922F-8543FA17F581}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{53E0DFEF-B4D7-4B20-8E94-715A31B4D782} = {D4501FB8-4BC6-497B-A046-843EC79217A3}
+		{73FEDD73-EEA3-4BDD-8CE3-E912E7C28237} = {D4501FB8-4BC6-497B-A046-843EC79217A3}
+		{76118F5E-D6BD-4644-922F-8543FA17F581} = {D4501FB8-4BC6-497B-A046-843EC79217A3}
 	EndGlobalSection
 EndGlobal

@@ -30,7 +30,9 @@ namespace QuestRoomMVC.Domain.Entities
         public string? Image { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-
+        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
 
     }
 }

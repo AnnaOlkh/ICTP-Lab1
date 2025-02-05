@@ -14,6 +14,8 @@ namespace QuestRoomMVC.Domain.Entities
         public User? User { get; set; }
         public int RoomId { get; set; }
         public Room? Room { get; set; }
+        /*public int ScheduleId { get; set; }
+        public Schedule? Schedule { get; set; }*/
 
         [Range(1, 20)]
         public required int PlayersNumber { get; set; }

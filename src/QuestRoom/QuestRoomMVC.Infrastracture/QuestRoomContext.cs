@@ -14,6 +14,13 @@ public class QuestRoomContext : DbContext
     public QuestRoomContext(DbContextOptions<QuestRoomContext> options) : base(options)
     {
     }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Room> Rooms { get; set; }
+    public DbSet<Genre> Genres { get; set; }
+    public DbSet<Location> Locations { get; set; }
+    public DbSet<Booking> Bookings { get; set; }
+    public DbSet<Schedule> Schedules { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());

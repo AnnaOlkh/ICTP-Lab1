@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection.Emit;
 
 namespace QuestRoomMVC.Infrastracture.EntityConfigurations
 {
@@ -15,6 +16,7 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
         {
             builder.HasKey(room => room.Id);
             builder.Property(room => room.Id).UseIdentityColumn();
+
 
             builder.Property(room => room.Name)
                 .IsRequired()
@@ -32,9 +34,11 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
                 .HasMaxLength(5000);
 
             builder.Property(room => room.CreatedAt)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
 
-            builder.Property(room => room.UpdatedAt);
+            builder.Property(room => room.UpdatedAt)
+                .HasDefaultValueSql("GETDATE()");
 
             builder.HasOne(room => room.Location)
                 .WithMany(location => location.Rooms)

@@ -22,7 +22,8 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
                 .HasMaxLength(1000);
 
             builder.Property(booking => booking.CreatedAt)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
 
             builder.HasOne(booking => booking.User)
                 .WithMany(user => user.Bookings)

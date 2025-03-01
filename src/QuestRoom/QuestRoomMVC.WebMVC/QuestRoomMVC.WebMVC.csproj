@@ -26,4 +26,8 @@
     <ProjectReference Include="..\QuestRoomMVC.Infrastracture\QuestRoomMVC.Infrastracture.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastracture\" />
+  </ItemGroup>
+
 </Project>

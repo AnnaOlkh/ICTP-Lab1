@@ -1,14 +1,23 @@
 ﻿@model IEnumerable<QuestRoomMVC.Domain.Entities.Room>
 
-@{
-    ViewData["Title"] = "Index";
+@if (ViewBag.FilterType == "Genre")
+{
+    ViewData["Title"] = "Quest rooms by genre";
+    <h1>Filtered by Genre: @ViewBag.FilterName</h1>
 }
-
-<h1>Index</h1>
-
+else if (ViewBag.FilterType == "Location")
+{
+    ViewData["Title"] = "Quest rooms by location";
+    <h1>Filtered by Location: @ViewBag.FilterName</h1>
+}else
+{
+    ViewData["Title"] = "Available quest rooms";
+    <h1>Available quest rooms</h1>
+}
 <p>
-    <a asp-action="Create">Create New</a>
-</p>
+    <!--<a asp-action="Create">Create New Room</a>-->
+    @Html.ActionLink("Add new room", "Create")
+    </p>
 <table class="table">
     <thead>
         <tr>

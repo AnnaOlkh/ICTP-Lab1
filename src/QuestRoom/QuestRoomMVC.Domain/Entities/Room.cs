@@ -11,12 +11,15 @@ namespace QuestRoomMVC.Domain.Entities
     {
         [MaxLength(50)]
         public required string Name { get; set; }
-
+        [Display (Name = "Location")]
         public int LocationId { get; set; }
-        public Location? Location { get; set; }
-        public int GenreId { get; set; }
-        public Genre? Genre { get; set; }
 
+        public Location? Location { get; set; }
+        [Display (Name = "Genre")]
+        public int GenreId { get; set; }
+
+        public Genre? Genre { get; set; }
+        [Display (Name = "Number of players")]
         [Range(1, 20)]
         public int MaxPlayers { get; set; }
 
@@ -26,7 +29,7 @@ namespace QuestRoomMVC.Domain.Entities
         [MaxLength(5000)]
         public string? Description { get; set; }
         public string? Image { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();

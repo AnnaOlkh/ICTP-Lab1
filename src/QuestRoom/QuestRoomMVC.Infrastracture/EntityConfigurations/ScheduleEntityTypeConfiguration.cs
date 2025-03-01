@@ -28,7 +28,8 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
             builder.Property(schedule => schedule.Price)
                 .IsRequired();
             builder.Property(schedule => schedule.CreatedAt)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
 
             builder.HasOne(schedule => schedule.Room)
                 .WithMany(room => room.Schedules)

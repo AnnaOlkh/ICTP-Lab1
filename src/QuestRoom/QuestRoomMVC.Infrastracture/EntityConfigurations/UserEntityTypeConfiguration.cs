@@ -27,12 +27,11 @@ internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.Property(user => user.Role)
-            .IsRequired();
-
         builder.Property(user => user.CreatedAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("GETDATE()");
 
-        builder.Property(user => user.UpdatedAt);
+        builder.Property(user => user.UpdatedAt)
+            .HasDefaultValueSql("GETDATE()");
     }
 }

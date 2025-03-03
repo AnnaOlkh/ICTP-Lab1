@@ -23,7 +23,10 @@ namespace QuestRoomMVC.WebMVC.Controllers
         // GET: Rooms
         public async Task<IActionResult> Index(int? genreId, int? locationId, string? name)
         {
-            IQueryable<Room> query = _context.Room.Include(r => r.Genre).Include(r => r.Location);
+            IQueryable<Room> query = _context.Room
+                 .Include(r => r.Genre)
+                 .Include(r => r.Location)
+                 .Include(r => r.Ratings);
 
             if (genreId != null)
             {
@@ -44,9 +47,11 @@ namespace QuestRoomMVC.WebMVC.Controllers
                 // Додайте логіку за замовчуванням, наприклад, повернення всіх кімнат
                 query = _context.Room;
             }
-
+            var rooms = await query.ToListAsync();
             ViewBag.Name = name;
-            return View(await query.ToListAsync());
+            ViewBag.Genres = _context.Genre.Select(g => g.Name).ToList();
+            ViewBag.Locations = _context.Location.Select(l => l.Name).ToList();
+            return View(rooms);
 
         }
 

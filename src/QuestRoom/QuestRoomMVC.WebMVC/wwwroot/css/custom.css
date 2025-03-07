@@ -1,19 +1,17 @@
 ﻿:root {
     --bs-heading-color: #dee2e6 !important;
-    --bs-body-color: #E05260; /* Світлий бордовий текст */
-    --bs-body-bg: #222; /* Оригінальний фон з Bootstrap Darkly */
-    --bs-link-color: #E05260; /* Світлі бордові посилання */
-    --bs-link-hover-color: #FF6E7C; /* Ще світліший бордовий при наведенні */
+    --bs-body-color: #E05260;
+    --bs-body-bg: #222;
+    --bs-link-color: #E05260;
+    --bs-link-hover-color: #FF6E7C;
 }
 
-/* Загальний стиль сторінки */
 body {
     padding-top: 72px;
     background-color: var(--bs-body-bg) !important;
     color: var(--bs-body-color) !important;
 }
 
-/* Оновлення Navbar */
 .navbar {
     position: fixed;
     top: 0;
@@ -21,8 +19,8 @@ body {
     width: 100%;
     z-index: 1050;
     margin-bottom: 20px;
-    background: #222 !important; /* Темний фон */
-    box-shadow: 0px 4px 10px rgba(224, 82, 96, 0.5); /* Червоне підсвічування */
+    background: #222 !important;
+    box-shadow: 0px 4px 10px rgba(224, 82, 96, 0.5);
     background-color: var(--bs-body-bg) !important;
 }
 
@@ -34,16 +32,14 @@ body {
     color: var(--bs-link-hover-color) !important;
 }
 
-/* Таблиця: покращення видимості */
 .table {
     color: var(--bs-body-color) !important;
 }
 
     .table th, .table td {
-        border-color: #444 !important; /* Робимо таблицю помітнішою */
+        border-color: #444 !important;
     }
 
-/* Посилання */
 a {
     color: var(--bs-link-color) !important;
 }
@@ -52,7 +48,6 @@ a {
         color: var(--bs-link-hover-color) !important;
     }
 
-/* Поле пошуку */
 .form-control {
     color: var(--bs-body-color) !important;
     background-color: #303030 !important;
@@ -68,7 +63,6 @@ a {
         color: var(--bs-body-color) !important;
     }
 
-/* Кнопки */
 .btn {
     color: #fff !important;
     background-color: #A23E48 !important;
@@ -86,27 +80,27 @@ a {
 }
 
 .card-img-overlay {
-    background: rgba(0, 0, 0, 0.5); /* Dark transparent background for text readability */
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 10px;
 }
 .fixed-image {
-    height: 250px; /* Фіксована висота для всіх картинок */
-    object-fit: cover; /* Обрізає зображення по центру, зберігаючи пропорції */
-    border-radius: 10px 10px 0 0; /* Закруглені кути тільки зверху */
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
 }
 
 .card {
-    height: 90%; /* Вирівнює всі картки по висоті */
+    height: 90%;
     transform: scale(0.95);
 }
-/* Сайдбар */
+
 #sidebar {
     width: 250px;
     position: fixed;
     top: 72px;
     left: -250px;
     height: calc(100vh - 72px);
-    background: #343a40; /* Темний фон */
+    background: #343a40;
     color: white;
     padding: 15px;
     transition: left 0.3s ease-in-out;
@@ -114,12 +108,10 @@ a {
     z-index: 1040;
 }
 
-    /* Відкритий сайдбар */
     #sidebar.show {
         left: 0;
     }
 
-/* Контент зміщується, щоб не перекривати сайдбар */
 #content {
     margin-left: 0;
     transition: margin-left 0.3s ease-in-out;
@@ -129,9 +121,9 @@ a {
     margin-left: 250px;
 }
 #sidebar::-webkit-scrollbar {
-    width: 0px; /* Прибирає скролбар у Chrome, Safari */
+    width: 0px;
 }
 .container {
-    max-width: 100%; /* Щоб контент не виходив за межі екрану */
-    overflow-x: hidden; /* Видаляє горизонтальний скрол */
+    max-width: 100%;
+    overflow-x: hidden;
 }

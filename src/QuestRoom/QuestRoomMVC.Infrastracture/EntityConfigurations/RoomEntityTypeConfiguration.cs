@@ -44,9 +44,6 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
                 .WithMany(location => location.Rooms)
                 .HasForeignKey(room => room.LocationId);
 
-            builder.HasOne(room => room.Genre)
-                .WithMany(genre => genre.Rooms)
-                .HasForeignKey(room => room.GenreId);
             builder.HasMany(room => room.Ratings)
                 .WithOne(rating => rating.Room)
                 .HasForeignKey(rating => rating.RoomId);
@@ -54,6 +51,13 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
             builder.HasMany(room => room.Schedules)
                 .WithOne(schedule => schedule.Room)
                 .HasForeignKey(schedule => schedule.RoomId);
+
+            builder.HasMany(room => room.Genres)
+                .WithMany(genre => genre.Rooms)
+                .UsingEntity<Dictionary<string, object>>(
+                    "RoomGenres",
+                    r => r.HasOne<Genre>().WithMany().HasForeignKey("GenreId").OnDelete(DeleteBehavior.Cascade),
+                    g => g.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.Cascade));
         }
     }
 }

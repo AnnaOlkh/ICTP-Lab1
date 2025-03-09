@@ -61,7 +61,6 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LocationId = table.Column<int>(type: "int", nullable: false),
-                    GenreId = table.Column<int>(type: "int", nullable: false),
                     MaxPlayers = table.Column<int>(type: "int", nullable: false),
                     Difficulty = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
@@ -72,12 +71,6 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Room", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Room_Genre_GenreId",
-                        column: x => x.GenreId,
-                        principalTable: "Genre",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Room_Location_LocationId",
                         column: x => x.LocationId,
@@ -110,6 +103,30 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                         name: "FK_Rating_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoomGenres",
+                columns: table => new
+                {
+                    GenreId = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomGenres", x => new { x.GenreId, x.RoomId });
+                    table.ForeignKey(
+                        name: "FK_RoomGenres_Genre_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genre",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoomGenres_Room_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Room",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -200,14 +217,14 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Room_GenreId",
-                table: "Room",
-                column: "GenreId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Room_LocationId",
                 table: "Room",
                 column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoomGenres_RoomId",
+                table: "RoomGenres",
+                column: "RoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schedule_RoomId",
@@ -225,16 +242,19 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                 name: "Rating");
 
             migrationBuilder.DropTable(
+                name: "RoomGenres");
+
+            migrationBuilder.DropTable(
                 name: "Schedule");
 
             migrationBuilder.DropTable(
                 name: "User");
 
             migrationBuilder.DropTable(
-                name: "Room");
+                name: "Genre");
 
             migrationBuilder.DropTable(
-                name: "Genre");
+                name: "Room");
 
             migrationBuilder.DropTable(
                 name: "Location");

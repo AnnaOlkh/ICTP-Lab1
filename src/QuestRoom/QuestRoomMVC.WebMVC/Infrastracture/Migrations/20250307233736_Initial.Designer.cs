@@ -12,7 +12,7 @@ using QuestRoomMVC.Infrastracture;
 namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
 {
     [DbContext(typeof(QuestRoomContext))]
-    [Migration("20250224023447_Initial")]
+    [Migration("20250307233736_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -153,9 +153,6 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.Property<int>("Difficulty")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenreId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
@@ -176,8 +173,6 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                         .HasDefaultValueSql("GETDATE()");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GenreId");
 
                     b.HasIndex("LocationId");
 
@@ -252,6 +247,21 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("RoomGenres", b =>
+                {
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GenreId", "RoomId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("RoomGenres");
+                });
+
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Booking", b =>
                 {
                     b.HasOne("QuestRoomMVC.Domain.Entities.Room", null)
@@ -296,19 +306,11 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Room", b =>
                 {
-                    b.HasOne("QuestRoomMVC.Domain.Entities.Genre", "Genre")
-                        .WithMany("Rooms")
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("QuestRoomMVC.Domain.Entities.Location", "Location")
                         .WithMany("Rooms")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Genre");
 
                     b.Navigation("Location");
                 });
@@ -324,9 +326,19 @@ namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Genre", b =>
+            modelBuilder.Entity("RoomGenres", b =>
                 {
-                    b.Navigation("Rooms");
+                    b.HasOne("QuestRoomMVC.Domain.Entities.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuestRoomMVC.Domain.Entities.Room", null)
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("QuestRoomMVC.Domain.Entities.Location", b =>

@@ -20,7 +20,8 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
                 .IsRequired();
 
             builder.Property(rating => rating.CreatedAt)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
 
             builder.HasOne(rating => rating.User)
                 .WithMany(user => user.Ratings)

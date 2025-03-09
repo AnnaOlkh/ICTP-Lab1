@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection.Emit;
 
 namespace QuestRoomMVC.Infrastracture.EntityConfigurations
 {
@@ -15,6 +16,7 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
         {
             builder.HasKey(room => room.Id);
             builder.Property(room => room.Id).UseIdentityColumn();
+
 
             builder.Property(room => room.Name)
                 .IsRequired()
@@ -32,17 +34,16 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
                 .HasMaxLength(5000);
 
             builder.Property(room => room.CreatedAt)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
 
-            builder.Property(room => room.UpdatedAt);
+            builder.Property(room => room.UpdatedAt)
+                .HasDefaultValueSql("GETDATE()");
 
             builder.HasOne(room => room.Location)
                 .WithMany(location => location.Rooms)
                 .HasForeignKey(room => room.LocationId);
 
-            builder.HasOne(room => room.Genre)
-                .WithMany(genre => genre.Rooms)
-                .HasForeignKey(room => room.GenreId);
             builder.HasMany(room => room.Ratings)
                 .WithOne(rating => rating.Room)
                 .HasForeignKey(rating => rating.RoomId);
@@ -50,6 +51,13 @@ namespace QuestRoomMVC.Infrastracture.EntityConfigurations
             builder.HasMany(room => room.Schedules)
                 .WithOne(schedule => schedule.Room)
                 .HasForeignKey(schedule => schedule.RoomId);
+
+            builder.HasMany(room => room.Genres)
+                .WithMany(genre => genre.Rooms)
+                .UsingEntity<Dictionary<string, object>>(
+                    "RoomGenres",
+                    r => r.HasOne<Genre>().WithMany().HasForeignKey("GenreId").OnDelete(DeleteBehavior.Cascade),
+                    g => g.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.Cascade));
         }
     }
 }

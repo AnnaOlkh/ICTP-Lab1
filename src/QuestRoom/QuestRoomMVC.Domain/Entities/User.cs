@@ -5,27 +5,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestRoomMVC.Domain.Entities
+namespace QuestRoomMVC.Domain.Entities;
+
+public class User : Entity, IAggregateRoot
 {
-    public class User : Entity, IAggregateRoot
+    public enum UserRole
     {
-        public enum UserRole
-        {
-            Admin,
-            Сustomer
-        }
-
-        [MaxLength(50)]
-        public required string FirstName { get; set; }
-
-        [MaxLength(50)]
-        public required string LastName { get; set; }
-        public UserRole Role { get; set; } = UserRole.Сustomer;
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public DateTime? UpdatedAt { get; set; }
-        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
-        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
+        Admin,
+        Сustomer
     }
+
+    [MaxLength(50)]
+    public required string FirstName { get; set; }
+
+    [MaxLength(50)]
+    public required string LastName { get; set; }
+    /*public UserRole Role { get; set; } = UserRole.Сustomer;*/
+
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    public DateTime? UpdatedAt { get; set; }
+    public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+    public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
 }

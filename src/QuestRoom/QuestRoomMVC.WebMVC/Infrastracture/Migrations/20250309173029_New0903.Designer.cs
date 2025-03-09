@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuestRoomMVC.Infrastracture;
 
@@ -11,9 +12,11 @@ using QuestRoomMVC.Infrastracture;
 namespace QuestRoomMVC.WebMVC.Infrastracture.Migrations
 {
     [DbContext(typeof(QuestRoomContext))]
-    partial class QuestRoomContextModelSnapshot : ModelSnapshot
+    [Migration("20250309173029_New0903")]
+    partial class New0903
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

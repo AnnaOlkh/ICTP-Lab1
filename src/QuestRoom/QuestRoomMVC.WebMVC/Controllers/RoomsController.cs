@@ -24,11 +24,11 @@ namespace QuestRoomMVC.WebMVC.Controllers
         public async Task<IActionResult> Index(int? genreId, int? locationId, string? name)
         {
             IQueryable<Room> query = _context.Room
-                 .Include(r => r.Genres)
-                 .Include(r => r.Location)
-                 .Include(r => r.Ratings);
+                .Include(r => r.Genres)
+                .Include(r => r.Location)
+                .Include(r => r.Ratings);
 
-            if (genreId != null)
+            if (genreId.HasValue)
             {
                 query = query.Where(r => r.Genres.Any(g => g.Id == genreId));
                 ViewBag.FilterType = "Genre";
@@ -38,25 +38,32 @@ namespace QuestRoomMVC.WebMVC.Controllers
                     .Select(g => g.Name)
                     .FirstOrDefaultAsync();
             }
-            else if (locationId != null)
+
+            if (locationId.HasValue)
             {
                 query = query.Where(r => r.LocationId == locationId);
                 ViewBag.FilterType = "Location";
                 ViewBag.FilterId = locationId;
-                ViewBag.FilterName = _context.Location.Where(l => l.Id == locationId).Select(l => l.Name).FirstOrDefault();
+                ViewBag.FilterName = await _context.Location
+                    .Where(l => l.Id == locationId)
+                    .Select(l => l.Name)
+                    .FirstOrDefaultAsync();
             }
-            else
-            {
-                // Додайте логіку за замовчуванням, наприклад, повернення всіх кімнат
-                query = _context.Room;
-            }
-            var rooms = await query.ToListAsync();
-            ViewBag.Name = name;
-            ViewBag.Genres = _context.Genre.Select(g => g.Name).ToList();
-            ViewBag.Locations = _context.Location.Select(l => l.Name).ToList();
-            return View(rooms);
 
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(r => r.Name.Contains(name));
+            }
+
+            var rooms = await query.ToListAsync();
+
+            ViewBag.Genres = await _context.Genre.ToListAsync();
+            ViewBag.Locations = await _context.Location.ToListAsync();
+
+            return View(rooms);
         }
+
+
         public IActionResult Filter(List<int> locations, List<int> genres, int? maxPrice, int? players, int? difficulty)
         {
             var query = _context.Room

@@ -131,3 +131,32 @@ a {
     border-top: 2px solid #6c757d;
     margin: 1rem 0;
 }
+/* Стилі для жанрів без підсвітки */
+.badge-genre {
+    background-color: #A23E48;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: background-color 0.3s ease-in-out;
+}
+
+    .badge-genre:hover {
+        background-color: #D9636E;
+        cursor: pointer;
+    }
+
+/* Стилі для локації без підсвітки */
+.badge-location {
+    background-color: #2c2f33;
+    color: #E05260;
+    padding: 5px 12px;
+    border: 1px solid #E05260;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+/* Покращення розділення рядків */
+.room-meta {
+    margin-bottom: 10px;
+}

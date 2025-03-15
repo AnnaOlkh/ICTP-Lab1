@@ -5,6 +5,9 @@
     @Html.ActionLink("Add new room", "Create")
     </p>
 
+@await Component.InvokeAsync("Sidebar", new { locations = ViewBag.Locations, genres = ViewBag.Genres })
+
+
 <div class="container mt-4">
     <div class="row">
         @foreach (var room in Model)

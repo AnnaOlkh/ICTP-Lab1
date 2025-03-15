@@ -1,0 +1,79 @@
+﻿<div class="wrapper d-flex">
+    <div id="sidebar">
+        <h4 class="text-light">Фільтри</h4>
+
+        <form method="get" action="@Url.Action("Filter", "QuestRooms")">
+
+            <!-- Локація -->
+            <div class="mb-3">
+                <label class="form-label text-light">Локація</label><br>
+                @foreach (var location in ViewBag.Locations)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="location" value="@location">
+                        <label class="form-check-label text-light">@location</label>
+                    </div>
+                }
+            </div>
+
+            <hr class="border-secondary">
+
+            <!-- Жанр -->
+            <div class="mb-3">
+                <label class="form-label text-light">Жанр</label><br>
+                @foreach (var genre in ViewBag.Genres)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="genre" value="@genre">
+                        <label class="form-check-label text-light">@genre</label>
+                    </div>
+                }
+            </div>
+            <hr class="border-secondary">
+
+            <!-- Ціна -->
+            <div class="mb-3">
+                <label for="priceRange" class="form-label text-light">Ціна (грн)</label>
+                <div class="d-flex justify-content-between">
+                    <span>1</span>
+                    <span>20000</span>
+                </div>
+                <input type="range" class="form-range" id="priceRange" name="price" min="1" max="20000" value="1000" oninput="priceValue.innerText = this.value">
+                <div class="text-center text-light">
+                    <span id="priceValue">1000</span> грн
+                </div>
+            </div>
+
+            <hr class="border-secondary">
+
+            <!-- Кількість гравців -->
+            <div class="mb-3">
+                <label for="playersRange" class="form-label text-light">Кількість гравців</label>
+                <div class="d-flex justify-content-between">
+                    <span>1</span>
+                    <span>20</span>
+                </div>
+                <input type="range" class="form-range" id="playersRange" name="players" min="1" max="20" value="5" oninput="playersValue.innerText = this.value">
+                <div class="text-center text-light">
+                    <span id="playersValue">5</span> гравців
+                </div>
+            </div>
+
+            <hr class="border-secondary">
+
+            <!-- Складність -->
+            <div class="mb-3">
+                <label class="form-label text-light">Складність</label>
+                <select class="form-select bg-dark text-light" name="difficulty">
+                    <option value="1">1/5</option>
+                    <option value="2">2/5</option>
+                    <option value="3">3/5</option>
+                    <option value="4">4/5</option>
+                    <option value="5">5/5</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Застосувати</button>
+        </form>
+    </div>
+</div>

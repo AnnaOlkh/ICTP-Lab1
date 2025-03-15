@@ -20,10 +20,24 @@ namespace QuestRoomMVC.WebMVC.Controllers
         }
 
         // GET: Schedules
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int weekOffset = 0, DateTime? selectedDate = null)
         {
-            var questRoomContext = _context.Schedule.Include(s => s.Room);
-            return View(await questRoomContext.ToListAsync());
+            var today = DateTime.Today;
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday).AddDays(7 * weekOffset);
+            var endOfWeek = startOfWeek.AddDays(6);
+
+            selectedDate ??= startOfWeek;
+
+            var schedules = await _context.Schedule
+                .Include(s => s.Room)
+                .ThenInclude(r => r.Location)
+                .Where(s => s.StartTime.Date == selectedDate.Value.Date)
+                .OrderBy(s => s.StartTime)
+                .ToListAsync();
+
+            ViewBag.WeekOffset = weekOffset;
+            ViewBag.SelectedDate = selectedDate;
+            return View(schedules);
         }
 
         // GET: Schedules/Details/5
@@ -57,7 +71,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RoomId,StartTime,EndTime,IsBooked,Price,Id")] Schedule schedule)
+        public async Task<IActionResult> Create([Bind("RoomId,StartTime,EndTime,IsBooked,Price,CreatedAt,Id")] Schedule schedule)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +105,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RoomId,StartTime,EndTime,IsBooked,Price,Id")] Schedule schedule)
+        public async Task<IActionResult> Edit(int id, [Bind("RoomId,StartTime,EndTime,IsBooked,Price,CreatedAt,Id")] Schedule schedule)
         {
             if (id != schedule.Id)
             {
@@ -102,17 +116,6 @@ namespace QuestRoomMVC.WebMVC.Controllers
             {
                 try
                 {
-                    /*var existingSchedule = await _context.User.FindAsync(id);
-                    if (existingSchedule == null)
-                    {
-                        return NotFound();
-                    }
-
-                    existingSchedule.RoomId = schedule.RoomId;
-                    existingSchedule.LastName = schedule.LastName;
-                    existingSchedule.UpdatedAt = DateTime.Now;
-
-                    await _context.SaveChangesAsync();*/
                     _context.Update(schedule);
                     await _context.SaveChangesAsync();
                 }

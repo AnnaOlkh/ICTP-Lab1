@@ -15,11 +15,6 @@ namespace QuestRoomMVC.Domain.Entities
         public int LocationId { get; set; }
 
         public Location? Location { get; set; }
-        [Display (Name = "Genre")]
-        /*public int GenreId { get; set; }
-
-        public Genre? Genre { get; set; }
-        [Display (Name = "Number of players")]*/
         [Range(1, 20)]
         public int MaxPlayers { get; set; }
 

@@ -2,64 +2,43 @@
 
 @{
     ViewData["Title"] = "Index";
+    var weekOffset = ViewBag.WeekOffset as int? ?? 0;
+    var selectedDate = ViewBag.SelectedDate as DateTime? ?? DateTime.Today;
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a asp-action="Index" asp-route-weekOffset="@(weekOffset - 1)" class="btn btn-secondary">← Попередній тиждень</a>
+        <a asp-action="Index" asp-route-weekOffset="@(weekOffset + 1)" class="btn btn-secondary">Наступний тиждень →</a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Room)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsBooked)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Room.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsBooked)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="d-flex justify-content-center overflow-auto mb-3">
+        @for (var day = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday + 7 * weekOffset); day <= DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday + 7 * weekOffset + 6); day = day.AddDays(1))
+        {
+            <a asp-action="Index" asp-route-weekOffset="@weekOffset" asp-route-selectedDate="@day.ToString("yyyy-MM-dd")" class="p-2 text-center @(day.Date == selectedDate.Date ? "bg-secondary" : "")" style="min-width: 120px; cursor: pointer; text-decoration: none; color: var(--bs-body-color);">
+                <div>@day.ToString("dd MMMM")</div>
+                <div class="small">@day.ToString("dddd")</div>
+            </a>
+        }
+    </div>
+
+    @foreach (var roomGroup in Model.GroupBy(s => s.Room.Name))
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5>@roomGroup.Key</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap">
+                    @foreach (var schedule in roomGroup)
+                    {
+                        <div class="p-2 border rounded m-1 @(schedule.IsBooked ? "bg-secondary" : "bg-dark")" style="cursor: pointer;">
+                            <div class="hover-time">@schedule.StartTime.ToString("HH:mm")</div>
+                            <div>@schedule.Price грн</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

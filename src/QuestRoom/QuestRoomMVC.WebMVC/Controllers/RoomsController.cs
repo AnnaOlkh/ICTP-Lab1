@@ -28,7 +28,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
                 .Include(r => r.Location)
                 .Include(r => r.Ratings);
 
-            if (genreId.HasValue)
+            /*if (genreId.HasValue)
             {
                 query = query.Where(r => r.Genres.Any(g => g.Id == genreId));
                 ViewBag.FilterType = "Genre";
@@ -53,18 +53,18 @@ namespace QuestRoomMVC.WebMVC.Controllers
             if (!string.IsNullOrEmpty(name))
             {
                 query = query.Where(r => r.Name.Contains(name));
-            }
+            }*/
 
             var rooms = await query.ToListAsync();
 
-            ViewBag.Genres = await _context.Genre.ToListAsync();
-            ViewBag.Locations = await _context.Location.ToListAsync();
+            ViewBag.Locations = _context.Location.Select(l => l.Name).ToList();
+            ViewBag.Genres = _context.Genre.Select(g => g.Name).ToList();
 
             return View(rooms);
         }
 
 
-        public IActionResult Filter(List<int> locations, List<int> genres, int? maxPrice, int? players, int? difficulty)
+       /* public IActionResult Filter(List<int> locations, List<int> genres, int? maxPrice, int? players, int? difficulty)
         {
             var query = _context.Room
                 .Include(r => r.Location)
@@ -98,7 +98,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
             // Return the filtered result
             var filteredRooms = query.ToList();
             return View("Index", filteredRooms);
-        }
+        }*/
 
         // GET: Rooms/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -124,7 +124,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
         public IActionResult Create()
         {
             ViewBag.Genres = _context.Genre.Select(g => new { g.Id, g.Name }).ToList();
-            ViewBag.Locations = _context.Location.Select(l => new { l.Id, l.Name }).ToList();
+            ViewBag.Locations = _context.Location.Select(l => new { l.Id, l.Name, l.Adress }).ToList();
             return View();
         }
 

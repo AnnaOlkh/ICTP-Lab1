@@ -160,3 +160,7 @@ a {
 .room-meta {
     margin-bottom: 10px;
 }
+.hover-time:hover {
+    color: var(--bs-link-hover-color);
+}
+

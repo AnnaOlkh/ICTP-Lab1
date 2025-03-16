@@ -1,0 +1,23 @@
+﻿@model QuestRoomMVC.WebMVC.ViewModel.LoginViewModel
+<form asp-controller="Account" asp-action="Login" method="post">
+    <input type="hidden" asp-for="ReturnUrl" value="@ViewData["ReturnUrl"]" />
+
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div>
+        <input asp-for="RememberMe" type="checkbox" />
+        <label asp-for="RememberMe"></label>
+    </div>
+
+    <button type="submit" class="btn">Увійти</button>
+</form>

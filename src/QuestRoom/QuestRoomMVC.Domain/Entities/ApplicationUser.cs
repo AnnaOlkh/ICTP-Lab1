@@ -17,9 +17,10 @@ public class ApplicationUser : IdentityUser
 
     [MaxLength(50)]
     public required string LastName { get; set; }
-    public DateTime BirthYear { get; set; }
+    public required DateTime BirthYear { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     public DateTime? UpdatedAt { get; set; }
+    public User? UserProfile { get; set; }
 }

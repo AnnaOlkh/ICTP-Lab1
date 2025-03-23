@@ -12,7 +12,6 @@ using QuestRoomMVC.Infrastracture;
 
 namespace QuestRoomMVC.WebMVC.Controllers
 {
-    [Authorize]
     public class RoomsController : Controller
     {
         private readonly QuestRoomContext _context;

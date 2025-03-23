@@ -16,9 +16,7 @@
                 <!-- Кнопка для відкриття сайдбару -->
                 <button class="btn btn-outline-light me-3" id="sidebarToggle">☰</button>
 
-                <!-- Оновлене посилання на головну сторінку кімнат -->
                 <a class="navbar-brand" asp-area="" asp-controller="Rooms" asp-action="Index">RoomRunner</a>
-                <a class="navbar-brand" asp-area="" asp-controller="Schedules" asp-action="Index">Розклад</a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02"
                         aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,20 +26,37 @@
                 <div class="collapse navbar-collapse" id="navbarColor02">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" asp-controller="Rooms" asp-action="Index">Кімнати</a>
+                            <a class="nav-link active" asp-controller="Schedules" asp-action="Index">Розклад</a>
                         </li>
                     </ul>
 
-                    <form class="d-flex">
-                        <input class="form-control me-sm-2" type="search" placeholder="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                    </form>
+                    <!-- Відображення інформації про користувача -->
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link">@User.Identity.Name</a>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post" asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <button type="submit" class="btn btn-outline-light">Вийти</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Увійти</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Реєстрація</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
     </header>
-
-
 
     <!-- Контейнер для зміщення контенту -->
     <div id="content">
@@ -50,13 +65,6 @@
                 @RenderBody()
             </main>
         </div>
-    </div>
-
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
     </div>
 
     <footer class="border-top footer text-muted">

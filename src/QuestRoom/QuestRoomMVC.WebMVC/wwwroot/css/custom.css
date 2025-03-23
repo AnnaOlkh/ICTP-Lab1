@@ -164,3 +164,35 @@ a {
     color: var(--bs-link-hover-color);
 }
 
+.calendar-day {
+    border: 1px solid #E05260;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 0 5px;
+    background-color: #2c2f33;
+    color: #E05260;
+    min-width: 120px;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.calendar-day:hover {
+    background-color: #3a3f47;
+    box-shadow: 0 0 10px rgba(255, 110, 124, 0.5);
+    cursor: pointer;
+    color: #FF6E7C;
+}
+
+.calendar-day.active {
+    background-color: #444;
+    border: 2px solid #FF6E7C;
+    color: #FF6E7C;
+}
+.calendar-container {
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+    gap: 10px; /* відстань між днями */
+    padding: 10px; /* щоб було місце для обводок/тіней */
+}
+
+

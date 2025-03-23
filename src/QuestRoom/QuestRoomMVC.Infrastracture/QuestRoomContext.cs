@@ -21,9 +21,10 @@ public class QuestRoomContext : DbContext
     public DbSet<Booking> Booking { get; set; }
     public DbSet<Schedule> Schedule { get; set; }
     public DbSet<Rating> Rating { get; set; }
-    public DbSet<Rating> RoomGenres { get; set; }
+    /*public DbSet<Rating> RoomGenres { get; set; }*/
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new ApplicationUserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new RoomEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new GenreEntityTypeConfiguration());

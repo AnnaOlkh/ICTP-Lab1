@@ -1,0 +1,61 @@
+﻿@model QuestRoomMVC.Domain.Entities.Booking
+@{
+    ViewData["Title"] = "Бронювання кімнати";
+    var schedule = ViewBag.Schedule as QuestRoomMVC.Domain.Entities.Schedule;
+    var room = schedule?.Room;
+}
+
+<h2 class="mb-4">Бронювання кімнати</h2>
+
+@if (room == null || schedule == null)
+{
+    <div class="alert alert-danger">Інформацію про розклад або кімнату не знайдено.</div>
+}
+else
+{
+    <div class="card mb-4">
+        <div class="row g-0">
+            @if (!string.IsNullOrEmpty(room.Image))
+            {
+                <div class="col-md-4">
+                    <img src="@room.Image" class="img-fluid rounded-start" alt="Зображення кімнати" />
+                </div>
+            }
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="card-title">@room.Name</h4>
+                    <p class="card-text"><strong>Локація:</strong> @room.Location?.Name</p>
+                    <p class="card-text"><strong>Складність:</strong> @room.Difficulty / 5</p>
+                    <p class="card-text"><strong>Макс. кількість гравців:</strong> @room.MaxPlayers</p>
+                    <p class="card-text"><strong>Жанри:</strong> @string.Join(", ", room.Genres.Select(g => g.Name))</p>
+                    <p class="card-text"><strong>Опис:</strong><br /> @room.Description</p>
+                    <p class="card-text mt-3"><strong>Дата гри:</strong> @schedule.StartTime.ToString("dd.MM.yyyy")</p>
+                    <p class="card-text"><strong>Час:</strong> @schedule.StartTime.ToString("HH:mm") – @schedule.EndTime.ToString("HH:mm")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form asp-controller="Bookings" asp-action="PostBooking" method="post">
+        <input type="hidden" asp-for="ScheduleId" />
+
+        <div class="mb-3">
+            <label asp-for="PlayersNumber" class="form-label">Кількість гравців</label>
+            <input asp-for="PlayersNumber" class="form-control" />
+            <span asp-validation-for="PlayersNumber" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Comment" class="form-label">Коментар (необов'язково)</label>
+            <textarea asp-for="Comment" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Comment" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Підтвердити бронювання</button>
+        <a asp-controller="Schedules" asp-action="Index" class="btn btn-secondary ms-2">Скасувати</a>
+    </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,10 +1,21 @@
 ﻿:root {
-    --bs-heading-color: #dee2e6 !important;
-    --bs-body-color: #E05260;
+    --bs-heading-color: #f8f9fa;
     --bs-body-bg: #222;
+    /* Основний текст — світло-сірий для читабельності */
+    --bs-body-color: #e0e0e0;
+    /* Посилання та акценти — залишаємо рожево-червоний */
     --bs-link-color: #E05260;
     --bs-link-hover-color: #FF6E7C;
+    /* Додатково — змінимо кольори для валідації */
+    --bs-danger: #ff6f61;
+    --bs-danger-rgb: 255, 111, 97;
 }
+.text-danger {
+    color: var(--bs-danger) !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
 
 body {
     padding-top: 72px;
@@ -194,5 +205,16 @@ a {
     gap: 10px; /* відстань між днями */
     padding: 10px; /* щоб було місце для обводок/тіней */
 }
+.confirmation-card {
+    background-color: #2c2f33;
+    color: var(--bs-body-color);
+    border: 1px solid #444;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+    .confirmation-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 15px rgba(255, 110, 124, 0.3);
+    }
 
 

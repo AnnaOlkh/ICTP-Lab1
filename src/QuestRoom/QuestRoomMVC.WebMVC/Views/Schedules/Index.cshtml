@@ -37,13 +37,26 @@
                 <div class="d-flex flex-wrap">
                     @foreach (var schedule in roomGroup)
                     {
-                        <div class="p-2 border rounded m-1 @(schedule.IsBooked ? "bg-secondary" : "bg-dark")" style="cursor: pointer;">
-                            <div class="hover-time">@schedule.StartTime.ToString("HH:mm")</div>
-                            <div>@schedule.Price грн</div>
-                        </div>
+                        if (!schedule.IsBooked)
+                        {
+                            <a href="@Url.Action("CreateBooking", "Bookings", new { scheduleId = schedule.Id })" class="text-decoration-none">
+                                <div class="p-2 border rounded m-1 bg-dark text-white" style="cursor: pointer;">
+                                    <div class="hover-time">@schedule.StartTime.ToString("HH:mm")</div>
+                                    <div>@schedule.Price грн</div>
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <div class="p-2 border rounded m-1 bg-secondary text-white" style="cursor: not-allowed;" title="Вже заброньовано">
+                                <div class="hover-time">@schedule.StartTime.ToString("HH:mm")</div>
+                                <div>@schedule.Price грн</div>
+                            </div>
+                        }
                     }
                 </div>
             </div>
         </div>
     }
+
 </div>

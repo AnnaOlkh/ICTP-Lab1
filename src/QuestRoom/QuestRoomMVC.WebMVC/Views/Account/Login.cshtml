@@ -1,7 +1,5 @@
 ﻿@model QuestRoomMVC.WebMVC.ViewModel.LoginViewModel
 <form asp-controller="Account" asp-action="Login" method="post">
-    <input type="hidden" asp-for="ReturnUrl" value="@ViewData["ReturnUrl"]" />
-
     <div>
         <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" />

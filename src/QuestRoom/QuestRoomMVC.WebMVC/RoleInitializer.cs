@@ -11,6 +11,7 @@ public class RoleInitializer
         string adminFirstName = "admin";
         string adminLastName = "admin";
         string password = "Qwerty_1";
+        DateTime adminYear = new DateTime(1999, 5, 18);
         if (await roleManager.FindByNameAsync("admin") == null)
         {
             await roleManager.CreateAsync(new IdentityRole("admin"));
@@ -26,6 +27,7 @@ public class RoleInitializer
                 Email = adminEmail, 
                 FirstName = adminFirstName,
                 LastName = adminLastName,
+                BirthYear = adminYear,
             };
             IdentityResult result = await userManager.CreateAsync(admin, password);
             if (result.Succeeded)

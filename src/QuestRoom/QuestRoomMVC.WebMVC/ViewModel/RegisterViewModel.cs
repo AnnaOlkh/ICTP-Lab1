@@ -15,6 +15,7 @@ public class RegisterViewModel
     public string LastName { get; set; }
 
     [Required]
+    [DataType(DataType.Date)]
     [Display(Name = "Рік народження")]
     public DateTime BirthYear { get; set; }
 
@@ -32,5 +33,5 @@ public class RegisterViewModel
     [DataType(DataType.Password)]
     [Compare("Password", ErrorMessage = "Паролі не співпадають")]
     [Display(Name = "Підтвердження паролю")]
-    public string PasswordConfirm { get; set; }
+    public string ConfirmPassword { get; set; } = null!;
 }

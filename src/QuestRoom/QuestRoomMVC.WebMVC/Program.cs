@@ -12,9 +12,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<QuestRoomContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString(nameof(QuestRoomContext))
  , sqlOptions => sqlOptions.MigrationsAssembly(typeof(Program).Assembly.GetName().Name)));//"QuestRoomMVC.Infrastructure"
 
-builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString(nameof(IdentityContext))
- , sqlOptions => sqlOptions.MigrationsAssembly(typeof(Program).Assembly.GetName().Name)));
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<QuestRoomContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 

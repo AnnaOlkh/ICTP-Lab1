@@ -21,6 +21,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -45,7 +46,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
                 if (result.Succeeded)
                 {
                     // установка кукі
-                    await _signInManager.SignInAsync(user, false);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -59,10 +60,9 @@ namespace QuestRoomMVC.WebMVC.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login()
         {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -71,19 +71,10 @@ namespace QuestRoomMVC.WebMVC.Controllers
             if (ModelState.IsValid)
             {
                 var result =
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    // перевіряємо, чи належить URL додатку
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        //return Redirect(model.ReturnUrl);
-                        return RedirectToAction("Index", "Rooms");
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {

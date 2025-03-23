@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using QuestRoomMVC.Domain.Entities;
 using QuestRoomMVC.Infrastracture.EntityConfigurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace QuestRoomMVC.Infrastracture;
 
-public class QuestRoomContext : DbContext
+public class QuestRoomContext : IdentityDbContext<ApplicationUser>
 {
     public QuestRoomContext(DbContextOptions<QuestRoomContext> options) : base(options)
     {
@@ -24,6 +25,7 @@ public class QuestRoomContext : DbContext
     /*public DbSet<Rating> RoomGenres { get; set; }*/
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new ApplicationUserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new RoomEntityTypeConfiguration());

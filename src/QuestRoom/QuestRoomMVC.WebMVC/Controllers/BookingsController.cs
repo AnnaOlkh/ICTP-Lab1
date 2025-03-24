@@ -109,7 +109,15 @@ namespace QuestRoomMVC.WebMVC.Controllers
                     ViewBag.Schedule = schedule;
                     return View(booking);
                 }
+                var room = await _context.Room
+                .FirstOrDefaultAsync(r => r.Id == schedule.RoomId);
 
+                if (room != null && booking.PlayersNumber > room.MaxPlayers)
+                {
+                    ModelState.AddModelError(nameof(booking.PlayersNumber), $"Максимальна кількість гравців: {room.MaxPlayers}");
+                    ViewBag.Schedule = schedule;
+                    return View("Create", booking);
+                }
                 booking.UserId = user.Id;
 
 

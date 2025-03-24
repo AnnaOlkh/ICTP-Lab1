@@ -1,0 +1,153 @@
+﻿@{
+    ViewData["Title"] = "Статистика бронювань";
+}
+<h2>Діаграма: Бронювання по годинах у дні тижня</h2>
+<div id="bookingsByTimeChart" style="height: 500px;"></div>
+
+<h2>Діаграма: Бронювання по кімнатах</h2>
+<div id="bookingsByRoomChart" style="height: 400px;"></div>
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function drawCharts() {
+            drawBookingsByTime();
+            drawBookingsByRoom();
+        }
+
+            function drawBookingsByTime() {
+            fetch('/api/chartsapi/bookings-by-day-and-hour')
+                .then(res => res.json())
+                .then(data => {
+                    const dayNames = ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
+                    const dataTable = new google.visualization.DataTable();
+                    dataTable.addColumn('number', 'Година');
+
+                    // Додаємо колонки — кожен день як серія
+                    for (let i = 0; i < 7; i++) {
+                        dataTable.addColumn('number', dayNames[i]);
+                    }
+
+                    // Порожня таблиця: 24 години, кожна з 7 днів
+                    const hoursData = Array.from({ length: 24 }, (_, hour) => {
+                        const row = [hour, 0, 0, 0, 0, 0, 0, 0];
+                        return row;
+                    });
+
+                    // Заповнення
+                    data.forEach(item => {
+                        const hour = item.hour;
+                        const day = item.day;
+                        if (hour >= 0 && hour < 24 && day >= 0 && day <= 6) {
+                            hoursData[hour][day + 1] = item.count;
+                        }
+                    });
+
+                    dataTable.addRows(hoursData);
+
+                         const options = {
+            title: 'Бронювання по годинах у дні тижня',
+            isStacked: false,
+            areaOpacity: 0.2,
+            backgroundColor: 'transparent', // прозорий фон (не білий!)
+            colors: [
+            '#E74C3C', // червоний (Нд)
+            '#3498DB', // синій (Пн)
+            '#2ECC71', // зелений (Вт)
+            '#F1C40F', // жовтий (Ср)
+            '#9B59B6', // фіолетовий (Чт)
+            '#E67E22', // помаранчевий (Пт)
+            '#1ABC9C'  // бірюзовий (Сб)
+        ]
+        ,
+            titleTextStyle: {
+                color: getComputedStyle(document.documentElement).getPropertyValue('--bs-heading-color'),
+                fontSize: 18,
+                bold: true
+            },
+            hAxis: {
+                title: 'Година',
+                titleTextStyle: {
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color')
+                },
+                textStyle: {
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color')
+                },
+                gridlines: { color: '#444' }, // мʼяка сітка
+                format: '##'
+            },
+            vAxis: {
+                title: 'Кількість бронювань',
+                format: '0',
+                minValue: 0,
+                gridlines: { color: '#444' },
+                titleTextStyle: {
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color')
+                },
+                textStyle: {
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color')
+                }
+            },
+            legend: {
+                position: 'bottom',
+                textStyle: {
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color')
+                }
+            }
+        };
+
+
+
+                    const chart = new google.visualization.AreaChart(document.getElementById('bookingsByTimeChart'));
+                    chart.draw(dataTable, options);
+                });
+        }
+
+
+                function drawBookingsByRoom() {
+            fetch('/api/chartsapi/bookings-by-room')
+                .then(res => res.json())
+                .then(data => {
+                    const dataTable = new google.visualization.DataTable();
+                    dataTable.addColumn('string', 'Кімната');
+                    dataTable.addColumn('number', 'Кількість');
+
+                    data.forEach(item => {
+                        dataTable.addRow([item.roomName, item.count]);
+                    });
+
+                    const options = {
+                        title: 'Бронювання по кімнатах',
+                        backgroundColor: 'transparent',
+                        pieHole: 0.4, // якщо хочеш "donut" стиль, або прибери цю лінію
+                        legend: {
+                            textStyle: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--bs-body-color')
+                            }
+                        },
+                        titleTextStyle: {
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--bs-heading-color'),
+                            fontSize: 18,
+                            bold: true
+                        },
+                        pieSliceTextStyle: {
+                            color: '#fff'
+                        },
+                        // Кольори — яскраві і контрастні
+                        colors: [
+                            '#E74C3C', '#3498DB', '#2ECC71', '#F1C40F',
+                            '#9B59B6', '#E67E22', '#1ABC9C', '#FF6E7C', '#A23E48'
+                        ]
+                    };
+
+                    const chart = new google.visualization.PieChart(document.getElementById('bookingsByRoomChart'));
+                    chart.draw(dataTable, options);
+                });
+        }
+
+    </script>
+}

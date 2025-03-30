@@ -2,4 +2,11 @@
     <h4 class="mb-3" style="color: var(--bs-link-hover-color);">Бронювання підтверджено!</h4>
     <p class="mb-3">Дякуємо! Ваше бронювання збережено.</p>
     <a asp-controller="Schedules" asp-action="Index" class="btn mt-2">Повернутись до розкладу</a>
+    <a asp-controller="Bookings"
+       asp-action="DownloadBookingPdf"
+       asp-route-id="@Model"
+       class="btn btn-outline-secondary mt-2 ms-3"
+       target="_blank">
+        Зберегти як PDF
+    </a>
 </div>

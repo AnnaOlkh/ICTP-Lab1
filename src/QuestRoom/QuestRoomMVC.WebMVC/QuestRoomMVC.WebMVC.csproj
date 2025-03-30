@@ -20,6 +20,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="Select.HtmlToPdf.NetCore" Version="24.1.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
@@ -30,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="Infrastracture\" />
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
 </Project>

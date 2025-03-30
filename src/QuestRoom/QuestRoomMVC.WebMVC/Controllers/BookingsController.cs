@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuestRoomMVC.Domain.Entities;
 using QuestRoomMVC.Infrastracture;
+using SelectPdf;
 
 namespace QuestRoomMVC.WebMVC.Controllers
 {
@@ -20,10 +21,11 @@ namespace QuestRoomMVC.WebMVC.Controllers
         {
             _context = context;
         }
-        public IActionResult Confirmed()
+        public IActionResult Confirmed(int id)
         {
-            return View();
+            return View(id);
         }
+
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
@@ -51,6 +53,48 @@ namespace QuestRoomMVC.WebMVC.Controllers
             return View(booking);
         }
         [HttpGet]
+        public IActionResult DownloadBookingPdf(int id)
+        {
+            var url = $"{Request.Scheme}://{Request.Host}/Bookings/PdfView/{id}";
+
+            var converter = new SelectPdf.HtmlToPdf();
+            // Задати фіксований розмір сторінки (наприклад, A5 або власний)
+            converter.Options.PdfPageSize = PdfPageSize.A5;
+            converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+
+            // Встановити поля сторінки (у пікселях)
+            converter.Options.MarginTop = 20;
+            converter.Options.MarginBottom = 20;
+            converter.Options.MarginLeft = 30;
+            converter.Options.MarginRight = 30;
+
+            // (необов’язково) Фіксована ширина веб-сторінки для рендеру
+            converter.Options.WebPageWidth = 800;
+
+            converter.Options.PdfPageSize = SelectPdf.PdfPageSize.A4;
+            converter.Options.PdfPageOrientation = SelectPdf.PdfPageOrientation.Portrait;
+
+            var doc = converter.ConvertUrl(url);
+            var pdf = doc.Save();
+            doc.Close();
+
+            return File(pdf, "application/pdf", $"booking_{id}.pdf");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PdfView(int id)
+        {
+            var booking = await _context.Booking
+                .Include(b => b.User).ThenInclude(u => u.ApplicationUser)
+                .Include(b => b.Schedule).ThenInclude(s => s.Room)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+            if (booking == null) return NotFound();
+
+            return View(booking);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> CreateBooking(int scheduleId)
         {
             var schedule = await _context.Schedule
@@ -71,6 +115,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
             ViewBag.Schedule = schedule;
             return View("Create", new Booking { ScheduleId = scheduleId, PlayersNumber = 1 });
         }
+
         // POST: Bookings/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -132,7 +177,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Confirmed");
+                return RedirectToAction("Confirmed", new { id = booking.Id });
             }
 
             ViewBag.Schedule = schedule;

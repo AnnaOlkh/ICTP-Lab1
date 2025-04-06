@@ -97,6 +97,13 @@ namespace QuestRoomMVC.WebMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateBooking(int scheduleId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                // redirect до Login з поверненням сюди після логіну
+                var returnUrl = Url.Action("CreateBooking", "Bookings", new { scheduleId });
+                return RedirectToAction("Login", "Account", new { returnUrl });
+            }
+
             var schedule = await _context.Schedule
                 .Include(s => s.Room)
                 .FirstOrDefaultAsync(s => s.Id == scheduleId);
@@ -115,6 +122,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
             ViewBag.Schedule = schedule;
             return View("Create", new Booking { ScheduleId = scheduleId, PlayersNumber = 1 });
         }
+
 
         // POST: Bookings/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -152,7 +160,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
                 {
                     ModelState.AddModelError("", "Користувача не знайдено.");
                     ViewBag.Schedule = schedule;
-                    return View(booking);
+                    return View("Create", booking);
                 }
                 var room = await _context.Room
                 .FirstOrDefaultAsync(r => r.Id == schedule.RoomId);

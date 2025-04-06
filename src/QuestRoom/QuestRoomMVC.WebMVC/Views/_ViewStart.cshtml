@@ -1,3 +1,19 @@
-﻿@{
-    Layout = "_Layout";
+﻿@using QuestRoomMVC.Domain.Entities
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    Layout = "_LayoutUser";
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        var user = UserManager.GetUserAsync(User).Result;
+        var roles = UserManager.GetRolesAsync(user).Result;
+
+        if (roles.Contains("admin"))
+        {
+            Layout = "_LayoutAdmin";
+        }
+    }
 }

@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - QuestRoomMVC.WebMVC</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap_darkly.min.css" />
+    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/QuestRoomMVC.WebMVC.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <!-- Кнопка для відкриття сайдбару -->
+                <button class="btn btn-outline-light me-3" id="sidebarToggle">☰</button>
+
+                <a class="navbar-brand" asp-area="" asp-controller="Rooms" asp-action="Index">RoomRunner</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02"
+                        aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarColor02">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-controller="Schedules" asp-action="Index">Розклад</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Charts" asp-action="Index">Моя Статистика</a>
+                        </li>
+
+                    </ul>
+
+
+                    <!-- Відображення інформації про користувача -->
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link">@User.Identity.Name</a>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post" asp-area="" asp-controller="Account" asp-action="Logout">
+                                    <button type="submit" class="btn btn-outline-light">Вийти</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Увійти</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Реєстрація</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Контейнер для зміщення контенту -->
+    <div id="content">
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - QuestRoomMVC.WebMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

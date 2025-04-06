@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QuestRoomMVC.Domain.Entities;
+using QuestRoomMVC.Infrastracture;
 using QuestRoomMVC.WebMVC.ViewModel;
 
 namespace QuestRoomMVC.WebMVC.Controllers
@@ -9,11 +11,13 @@ namespace QuestRoomMVC.WebMVC.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly QuestRoomContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, QuestRoomContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
         [HttpGet]
         public IActionResult Register()
@@ -22,8 +26,10 @@ namespace QuestRoomMVC.WebMVC.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
                 var existingUser = await _userManager.FindByEmailAsync(model.Email);
@@ -32,7 +38,8 @@ namespace QuestRoomMVC.WebMVC.Controllers
                     ModelState.AddModelError(string.Empty, "Користувач з таким email вже існує.");
                     return View(model);
                 }
-                ApplicationUser user = new ApplicationUser
+
+                ApplicationUser appUser = new ApplicationUser
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
@@ -41,46 +48,59 @@ namespace QuestRoomMVC.WebMVC.Controllers
                     UserName = model.Email,
                     CreatedAt = DateTime.Now
                 };
-                // додаємо користувача
-                var result = await _userManager.CreateAsync(user, model.Password);
+
+                var result = await _userManager.CreateAsync(appUser, model.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "User");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
+                    var user = new User
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                        ApplicationUserId = appUser.Id,
+                    };
+                    _context.User.Add(user);
+                    await _context.SaveChangesAsync();
+                    await _userManager.AddToRoleAsync(appUser, "User");
+                    await _signInManager.SignInAsync(appUser, false);
+
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                        return Redirect(returnUrl);
+                    else
+                        return RedirectToAction("Index", "Rooms");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
             return View(model);
         }
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
-                var result =
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                        return Redirect(returnUrl);
+                    else
+                        return RedirectToAction("Index", "Rooms");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Неправильний логін чи (та) пароль");
-                }
+
+                ModelState.AddModelError("", "Неправильний логін чи (та) пароль");
             }
+
             return View(model);
         }
 

@@ -36,24 +36,42 @@ else
         </div>
     </div>
 
-    <form asp-controller="Bookings" asp-action="PostBooking" method="post">
-        <input type="hidden" asp-for="ScheduleId" />
-
-        <div class="mb-3">
-            <label asp-for="PlayersNumber" class="form-label">Кількість гравців</label>
-            <input asp-for="PlayersNumber" class="form-control" />
-            <span asp-validation-for="PlayersNumber" class="text-danger"></span>
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div class="alert alert-warning">
+            Щоб здійснити бронювання, увійдіть в акаунт.
         </div>
 
-        <div class="mb-3">
-            <label asp-for="Comment" class="form-label">Коментар (необов'язково)</label>
-            <textarea asp-for="Comment" class="form-control" rows="4"></textarea>
-            <span asp-validation-for="Comment" class="text-danger"></span>
-        </div>
+        <form method="get" asp-controller="Account" asp-action="Login">
+            <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+            <input type="hidden" name="scheduleId" value="@Model.ScheduleId" />
+            <input type="hidden" name="PlayersNumber" value="@Model.PlayersNumber" />
+            <input type="hidden" name="Comment" value="@Model.Comment" />
+            <button type="submit" class="btn btn-primary">Увійти для бронювання</button>
+            <a asp-controller="Schedules" asp-action="Index" class="btn btn-secondary ms-2">Скасувати</a>
+        </form>
+    }
+    else
+    {
+        <form asp-controller="Bookings" asp-action="PostBooking" method="post">
+            <input type="hidden" asp-for="ScheduleId" />
 
-        <button type="submit" class="btn btn-primary">Підтвердити бронювання</button>
-        <a asp-controller="Schedules" asp-action="Index" class="btn btn-secondary ms-2">Скасувати</a>
-    </form>
+            <div class="mb-3">
+                <label asp-for="PlayersNumber" class="form-label">Кількість гравців</label>
+                <input asp-for="PlayersNumber" class="form-control" />
+                <span asp-validation-for="PlayersNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Comment" class="form-label">Коментар (необов'язково)</label>
+                <textarea asp-for="Comment" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Підтвердити бронювання</button>
+            <a asp-controller="Schedules" asp-action="Index" class="btn btn-secondary ms-2">Скасувати</a>
+        </form>
+    }
 }
 
 @section Scripts {

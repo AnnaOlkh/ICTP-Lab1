@@ -12,6 +12,8 @@ using QuestRoomMVC.Domain.Entities;
 using QuestRoomMVC.Infrastracture;
 using QuestRoomMVC.WebMVC.ViewModel;
 using SelectPdf;
+using IronBarCode;
+using static System.Net.WebRequestMethods;
 
 namespace QuestRoomMVC.WebMVC.Controllers
 {
@@ -148,6 +150,19 @@ namespace QuestRoomMVC.WebMVC.Controllers
 
             return View(booking);
         }
+
+        [HttpGet]
+        public IActionResult GetQrCode(int id)
+        {
+            var url = "https://i.pinimg.com/236x/9d/40/4f/9d404f1a2f8ec68879aacac3c3c95f50.jpg";
+            //var url = $"{Request.Scheme}://{Request.Host}/Bookings/PdfView/{id}";
+            var qrCode = QRCodeWriter.CreateQrCode(url, 150);
+            qrCode.SetMargins(10);
+            qrCode.ChangeBackgroundColor(System.Drawing.Color.White);
+            qrCode.ChangeBarCodeColor(System.Drawing.Color.Black);
+            var stream = qrCode.ToStream();
+            return File(stream.ToArray(), "image/png");
+        }
         [HttpGet]
         public IActionResult DownloadBookingPdf(int id)
         {
@@ -166,6 +181,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
             converter.Options.PdfPageOrientation = SelectPdf.PdfPageOrientation.Portrait;
 
             var doc = converter.ConvertUrl(url);
+
             var pdf = doc.Save();
             doc.Close();
 

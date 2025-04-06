@@ -58,11 +58,15 @@
 </head>
 <body>
     <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <img src="/img/logo.png" alt="Logo" style="height: 100px;" />
-            <h2 style="color: #FF6E7C; margin: 0;">Підтвердження бронювання</h2>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
+            <div>
+                <img src="/img/logo.png" alt="Logo" style="height: 100px;" />
+                <h2 style="color: #FF6E7C; margin: 10px 0 0 0;">Підтвердження бронювання</h2>
+            </div>
+            <div>
+                <img src="/Bookings/GetQrCode/@Model.Id" alt="QR Code" width="200" height="200" />
+            </div>
         </div>
-
         <div class="info-row"><span class="label">Кімната:</span> @room.Name</div>
         <div class="info-row"><span class="label">Опис:</span> @room.Description</div>
         <div class="info-row"><span class="label">Дата:</span> @schedule.StartTime.ToLocalTime().ToString("dd.MM.yyyy")</div>

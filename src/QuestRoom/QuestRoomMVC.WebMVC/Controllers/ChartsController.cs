@@ -12,7 +12,6 @@ namespace QuestRoomMVC.WebMVC.Controllers
         {
             _context = context;
         }
-        [Authorize(Roles = "admin")]
         public IActionResult Index()
         {
             return View();

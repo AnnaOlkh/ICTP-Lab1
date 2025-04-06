@@ -4,6 +4,7 @@ using QuestRoomMVC.Infrastracture.EntityConfigurations;
 using Microsoft.AspNetCore.Identity;
 using QuestRoomMVC.Domain.Entities;
 using QuestRoomMVC.WebMVC;
+using QuestRoomMVC.WebMVC.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<QuestRoomContext>(options => options.UseSqlServer(
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<QuestRoomContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();
 
 var app = builder.Build();
 

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuestRoomMVC.Domain.Entities;
 using QuestRoomMVC.Infrastracture;
+using QuestRoomMVC.WebMVC.ViewModel;
 using SelectPdf;
 
 namespace QuestRoomMVC.WebMVC.Controllers
@@ -31,6 +33,100 @@ namespace QuestRoomMVC.WebMVC.Controllers
         {
             var questRoomContext = _context.Booking.Include(b => b.Schedule).Include(b => b.User);
             return View(await questRoomContext.ToListAsync());
+        }
+        public async Task<IActionResult> MyBookings()
+        {
+            var applicationUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(applicationUserId))
+                return Unauthorized();
+
+            var user = await _context.User
+                .Include(u => u.ApplicationUser)
+                .FirstOrDefaultAsync(u => u.ApplicationUserId == applicationUserId);
+
+            if (user == null)
+                return NotFound($"User not found for ApplicationUserId = {applicationUserId}");
+
+            var bookings = await _context.Booking
+                .Include(b => b.Schedule)
+                    .ThenInclude(s => s.Room)
+                .Where(b => b.UserId == user.Id)
+                .ToListAsync();
+
+            var ratings = await _context.Rating
+                .Where(r => r.UserId == user.Id)
+                .ToListAsync();
+
+            var viewModel = bookings.Select(b => new MyBookingViewModel
+            {
+                BookingId = b.Id,
+                RoomName = b.Schedule.Room.Name,
+                RoomImageUrl = b.Schedule.Room.Image,
+                EndTime = b.Schedule.EndTime,
+                AlreadyRated = ratings.Any(r => r.RoomId == b.Schedule.RoomId),
+                ExistingRating = ratings.FirstOrDefault(r => r.RoomId == b.Schedule.RoomId)?.Score,
+                RoomId = b.Schedule.RoomId
+            }).ToList();
+
+            return View(viewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Rate(int roomId, int score)
+        {
+            var applicationUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(applicationUserId))
+                return Unauthorized();
+
+            var user = await _context.User
+                .FirstOrDefaultAsync(u => u.ApplicationUserId == applicationUserId);
+
+            if (user == null)
+                return NotFound();
+
+            var booking = await _context.Booking
+                .Include(b => b.Schedule)
+                .FirstOrDefaultAsync(b => b.UserId == user.Id && b.Schedule.RoomId == roomId);
+
+            if (booking == null || booking.Schedule.EndTime > DateTime.UtcNow)
+                return BadRequest("Неможливо оцінити до завершення бронювання");
+
+            var alreadyRated = await _context.Rating.AnyAsync(r => r.UserId == user.Id && r.RoomId == roomId);
+            if (alreadyRated)
+                return BadRequest("Ви вже оцінили цю кімнату");
+
+            var rating = new Rating
+            {
+                UserId = user.Id,
+                RoomId = roomId,
+                Score = score,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Rating.Add(rating);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("MyBookings");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(int bookingId)
+        {
+            var booking = await _context.Booking
+                .Include(b => b.Schedule)
+                .FirstOrDefaultAsync(b => b.Id == bookingId);
+
+            if (booking == null)
+                return NotFound();
+
+            if (booking.Schedule.EndTime <= DateTime.UtcNow)
+                return BadRequest("Неможливо скасувати вже завершене бронювання.");
+            booking.Schedule.IsBooked = false;
+            _context.Booking.Remove(booking);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("MyBookings");
         }
 
         // GET: Bookings/Details/5
@@ -58,17 +154,12 @@ namespace QuestRoomMVC.WebMVC.Controllers
             var url = $"{Request.Scheme}://{Request.Host}/Bookings/PdfView/{id}";
 
             var converter = new SelectPdf.HtmlToPdf();
-            // Задати фіксований розмір сторінки (наприклад, A5 або власний)
             converter.Options.PdfPageSize = PdfPageSize.A5;
             converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
-
-            // Встановити поля сторінки (у пікселях)
             converter.Options.MarginTop = 20;
             converter.Options.MarginBottom = 20;
             converter.Options.MarginLeft = 30;
             converter.Options.MarginRight = 30;
-
-            // (необов’язково) Фіксована ширина веб-сторінки для рендеру
             converter.Options.WebPageWidth = 800;
 
             converter.Options.PdfPageSize = SelectPdf.PdfPageSize.A4;

@@ -1,24 +1,18 @@
-﻿
-document.addEventListener("DOMContentLoaded", function () {
-    let sidebar = document.getElementById("sidebar");
-    let content = document.getElementById("content");
-    let sidebarToggle = document.getElementById("sidebarToggle");
-
-    // Імітація натискання на кнопку "гамбургер" при завантаженні сторінки
+﻿document.addEventListener("DOMContentLoaded", function () {
+    const sidebar = document.getElementById("sidebar");
+    const sidebarToggle = document.getElementById("sidebarToggle");
     sidebar.classList.add("show");
-    content.classList.add("shift");
 
-    // Додаємо обробник кліку для кнопки, щоб працював стандартний функціонал
     sidebarToggle.addEventListener("click", function () {
         sidebar.classList.toggle("show");
-        content.classList.toggle("shift");
     });
 
-    // Закриття сайдбару при кліку поза ним
     document.addEventListener("click", function (event) {
-        if (!sidebar.contains(event.target) && event.target !== sidebarToggle) {
+        const isClickInside = sidebar.contains(event.target);
+        const isToggleClick = sidebarToggle.contains(event.target);
+
+        if (!isClickInside && !isToggleClick) {
             sidebar.classList.remove("show");
-            content.classList.remove("shift");
         }
     });
 });

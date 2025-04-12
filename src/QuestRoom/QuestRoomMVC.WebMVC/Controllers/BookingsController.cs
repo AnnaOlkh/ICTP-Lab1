@@ -120,7 +120,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
                 .FirstOrDefaultAsync(b => b.Id == bookingId);
 
             if (booking == null)
-                return NotFound();
+                return View("BookingNotFound");
 
             if (booking.Schedule.EndTime <= DateTime.UtcNow)
                 return BadRequest("Неможливо скасувати вже завершене бронювання.");
@@ -145,7 +145,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (booking == null)
             {
-                return NotFound();
+                return View("BookingNotFound");
             }
 
             return View(booking);
@@ -154,8 +154,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
         [HttpGet]
         public IActionResult GetQrCode(int id)
         {
-            var url = "https://i.pinimg.com/236x/9d/40/4f/9d404f1a2f8ec68879aacac3c3c95f50.jpg";
-            //var url = $"{Request.Scheme}://{Request.Host}/Bookings/PdfView/{id}";
+            var url = $"{Request.Scheme}://{Request.Host}/Bookings/ScanQrView/{id}";
             var qrCode = QRCodeWriter.CreateQrCode(url, 150);
             qrCode.SetMargins(10);
             qrCode.ChangeBackgroundColor(System.Drawing.Color.White);
@@ -163,6 +162,21 @@ namespace QuestRoomMVC.WebMVC.Controllers
             var stream = qrCode.ToStream();
             return File(stream.ToArray(), "image/png");
         }
+        [HttpGet]
+        public async Task<IActionResult> ScanQrView(int id)
+        {
+            var booking = await _context.Booking
+                .AsNoTracking()
+                .Include(b => b.Schedule).ThenInclude(s => s.Room)
+                .Include(b => b.User).ThenInclude(u => u.ApplicationUser)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+            if (booking == null)
+                return View("BookingNotFound");
+
+            return View("ScanQrView", booking);
+        }
+
         [HttpGet]
         public IActionResult DownloadBookingPdf(int id)
         {
@@ -196,7 +210,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
                 .Include(b => b.Schedule).ThenInclude(s => s.Room)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-            if (booking == null) return NotFound();
+            if (booking == null) return View("BookingNotFound");
 
             return View(booking);
         }
@@ -311,7 +325,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
             var booking = await _context.Booking.FindAsync(id);
             if (booking == null)
             {
-                return NotFound();
+                return View("BookingNotFound");
             }
             ViewData["ScheduleId"] = new SelectList(_context.Schedule, "Id", "Id", booking.ScheduleId);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "ApplicationUserId", booking.UserId);
@@ -369,7 +383,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (booking == null)
             {
-                return NotFound();
+                return View("BookingNotFound");
             }
 
             return View(booking);

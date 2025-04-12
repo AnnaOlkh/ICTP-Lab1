@@ -110,7 +110,7 @@ namespace QuestRoomMVC.WebMVC.Controllers
         {
             // видаляємо автентифікаційні куки
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Rooms");
         }
 
     }

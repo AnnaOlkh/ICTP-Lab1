@@ -1,0 +1,133 @@
+﻿@model QuestRoomMVC.Domain.Entities.Booking
+
+@{
+    Layout = null;
+    var schedule = Model.Schedule!;
+    var room = schedule.Room!;
+    var user = Model.User!;
+
+    string statusText;
+    string statusClass;
+
+    if (schedule.EndTime < DateTime.UtcNow)
+    {
+        statusText = "Бронювання завершене";
+        statusClass = "status status-finished";
+    }
+    else if (DateTime.UtcNow < schedule.StartTime)
+    {
+        statusText = "Актуальне";
+        statusClass = "status status-active";
+    }
+    else
+    {
+        statusText = "У процесі";
+        statusClass = "status status-pending";
+    }
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Перевірка бронювання</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            padding: 40px;
+        }
+
+        h2 {
+            color: #FF6E7C;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #2c2f33;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(255,110,124,0.2);
+        }
+
+        .info-row {
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #FF6E7C;
+        }
+
+        .text-muted {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: #444;
+            margin-top: 20px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-left: 10px;
+        }
+
+        .status-active {
+            background-color: #28a745; /* зелений */
+            color: #fff;
+        }
+
+        .status-finished {
+            background-color: #6c757d; /* сірий */
+            color: #fff;
+        }
+
+        .status-pending {
+            background-color: #ffc107; /* жовтий */
+            color: #222;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div style="margin-bottom: 30px;">
+            <h2>Перевірка бронювання</h2>
+        </div>
+
+        <div class="info-row"><span class="label">Кімната:</span> @room.Name</div>
+        <div class="info-row"><span class="label">Опис:</span> @room.Description</div>
+        <div class="info-row"><span class="label">Дата:</span> @schedule.StartTime.ToLocalTime().ToString("dd.MM.yyyy")</div>
+        <div class="info-row"><span class="label">Час:</span> @schedule.StartTime.ToLocalTime().ToString("HH:mm") – @schedule.EndTime.ToLocalTime().ToString("HH:mm")</div>
+        <div class="info-row"><span class="label">Гравців:</span> @Model.PlayersNumber</div>
+        <div class="info-row"><span class="label">Ціна:</span> @schedule.Price ₴</div>
+        <div class="info-row"><span class="label">Користувач:</span> @user.ApplicationUser.FirstName @user.ApplicationUser.LastName</div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Comment))
+        {
+            <div class="info-row"><span class="label">Коментар:</span> @Model.Comment</div>
+        }
+
+        <div class="info-row">
+            <span class="label">Актуальність:</span>
+            <span class="@statusClass">@statusText</span>
+        </div>
+
+        <hr />
+        <p class="text-muted">Дата створення бронювання: @Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+    </div>
+</body>
+</html>

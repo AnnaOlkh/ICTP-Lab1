@@ -39,6 +39,34 @@ namespace QuestRoomMVC.WebMVC.Controllers
             ViewBag.SelectedDate = selectedDate;
             return View(schedules);
         }
+        public async Task<IActionResult> DetailsByRoom(int roomId, int weekOffset = 0, DateTime? selectedDate = null)
+        {
+            var today = DateTime.Today;
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday).AddDays(7 * weekOffset);
+            var endOfWeek = startOfWeek.AddDays(6);
+
+            selectedDate ??= startOfWeek;
+
+            var schedules = await _context.Schedule
+                .Include(s => s.Room)
+                .ThenInclude(r => r.Location)
+                .Where(s => s.Room.Id == roomId && s.StartTime.Date == selectedDate.Value.Date)
+                .OrderBy(s => s.StartTime)
+                .ToListAsync();
+
+            var room = await _context.Room
+                .Include(r => r.Location)
+                .FirstOrDefaultAsync(r => r.Id == roomId);
+
+            if (room == null)
+                return NotFound();
+
+            ViewBag.Room = room;
+            ViewBag.WeekOffset = weekOffset;
+            ViewBag.SelectedDate = selectedDate;
+            return View("DetailsByRoom", schedules);
+        }
+
 
         // GET: Schedules/Details/5
         public async Task<IActionResult> Details(int? id)

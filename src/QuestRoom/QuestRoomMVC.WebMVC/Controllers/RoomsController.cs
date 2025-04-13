@@ -29,33 +29,6 @@ namespace QuestRoomMVC.WebMVC.Controllers
                 .Include(r => r.Location)
                 .Include(r => r.Ratings);
 
-            /*if (genreId.HasValue)
-            {
-                query = query.Where(r => r.Genres.Any(g => g.Id == genreId));
-                ViewBag.FilterType = "Genre";
-                ViewBag.FilterId = genreId;
-                ViewBag.FilterName = await _context.Genre
-                    .Where(g => g.Id == genreId)
-                    .Select(g => g.Name)
-                    .FirstOrDefaultAsync();
-            }
-
-            if (locationId.HasValue)
-            {
-                query = query.Where(r => r.LocationId == locationId);
-                ViewBag.FilterType = "Location";
-                ViewBag.FilterId = locationId;
-                ViewBag.FilterName = await _context.Location
-                    .Where(l => l.Id == locationId)
-                    .Select(l => l.Name)
-                    .FirstOrDefaultAsync();
-            }
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                query = query.Where(r => r.Name.Contains(name));
-            }*/
-
             var rooms = await query.ToListAsync();
 
             ViewBag.Locations = _context.Location.Select(l => l.Name).ToList();

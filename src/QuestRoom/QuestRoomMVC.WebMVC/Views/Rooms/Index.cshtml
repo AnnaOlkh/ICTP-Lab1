@@ -42,7 +42,13 @@
 
                         <div class="d-flex justify-content-between text-white mt-2">
                             <span>🎮 Складність: @room.Difficulty/5</span>
-                            <a href="#" class="btn btn-primary btn-sm">Детальніше</a>
+                            <a asp-controller="Schedules"
+                               asp-action="DetailsByRoom"
+                               asp-route-roomId="@room.Id"
+                               class="btn btn-primary btn-sm">
+                               Забронювати
+                            </a>
+
                         </div>
                     </div>
                 </div>
